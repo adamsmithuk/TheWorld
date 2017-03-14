@@ -9,6 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using TheWorld.Services;
 using Microsoft.Extensions.Configuration;
+using TheWorld.Models;
+using Newtonsoft.Json.Serialization;
+using AutoMapper;
+using TheWorld.Controllers.Api;
+using TheWorld.ViewModels;
 
 namespace TheWorld
 {
@@ -35,16 +40,48 @@ namespace TheWorld
         {
             services.AddSingleton(_config);
             services.AddScoped<IMailServices, MailService>();
-            services.AddMvc();
+
+            // Set Up Entityframe Work Services
+            services.AddDbContext<WorldContext>();
+
+            // Repository Service
+            services.AddScoped<IWorldRepository, WorldRepository>();
+
+            // Co-ordinate Service from place name
+            services.AddTransient<GeoCoordsService>();
+
+            // Seed the database
+            services.AddTransient<WorldContextSeedData>();
+
+            // Add Logging
+            services.AddLogging();
+
+            // Add MVC service
+            services.AddMvc()
+                .AddJsonOptions(config=>
+                {
+                    config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, 
+            ILoggerFactory loggerFactory,
+            WorldContextSeedData seeder)
         {
+
+            Mapper.Initialize(config =>
+            {
+                config.CreateMap<TripViewModel, Trip>().ReverseMap();
+                config.CreateMap<StopViewModel, Stop>().ReverseMap();
+            });
+
             if (_env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                loggerFactory.AddDebug(LogLevel.Information);
             }
+            else { loggerFactory.AddDebug(LogLevel.Error); }
             
             app.UseStaticFiles();
 
@@ -56,6 +93,8 @@ namespace TheWorld
                     defaults: new { controller = "App", action = "Index" }
                     );
             });
+
+            seeder.EnsureSeedData().Wait();
         }
     }
 }

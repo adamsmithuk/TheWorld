@@ -1,5 +1,11 @@
 ﻿{
   "MailSettings": {
-    "ToAddress":  "adam.smithuk@outlook.com"
+    "ToAddress": "adam.smithuk@outlook.com"
+  },
+  "ConnectionStrings": {
+    "WorldContextConnection": "Server=(localdb)\\MSSQLLocalDB;Database=TheWorldDb;Trusted_Connection=true;MultipleActiveResultSets=True"
+  },
+  "Keys": {
+    "BingKeys":  "DPNTEVERPUTKEYSINSOURCECONTROL"
   }
 }
