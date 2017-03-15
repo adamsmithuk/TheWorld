@@ -14,6 +14,9 @@ using Newtonsoft.Json.Serialization;
 using AutoMapper;
 using TheWorld.Controllers.Api;
 using TheWorld.ViewModels;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace TheWorld
 {
@@ -57,11 +60,42 @@ namespace TheWorld
             services.AddLogging();
 
             // Add MVC service
-            services.AddMvc()
-                .AddJsonOptions(config=>
+            services.AddMvc(config =>
+            {
+                if (_env.IsProduction()) {
+                    config.Filters.Add(new RequireHttpsAttribute());
+                }
+            })
+            .AddJsonOptions(config=>
+            {
+                config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
+
+            // Add Identity
+            services.AddIdentity<WorldUser, IdentityRole>(config =>
+            {
+                config.User.RequireUniqueEmail = true;
+                config.Password.RequiredLength = 8;
+                config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
+                config.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents()
                 {
-                    config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                });
+                    OnRedirectToLogin = async ctx =>
+                    {
+                        if (ctx.Request.Path.StartsWithSegments("/api") &&
+                             ctx.Response.StatusCode == 200)
+                        {
+                            ctx.Response.StatusCode = 401;
+                        }
+                        else
+                        {
+                            ctx.Response.Redirect(ctx.RedirectUri);
+                        }
+                        await Task.Yield();
+                    }
+                };
+
+            })
+            .AddEntityFrameworkStores<WorldContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,6 +103,9 @@ namespace TheWorld
             ILoggerFactory loggerFactory,
             WorldContextSeedData seeder)
         {
+            app.UseStaticFiles();
+
+            app.UseIdentity();
 
             Mapper.Initialize(config =>
             {
@@ -83,8 +120,6 @@ namespace TheWorld
             }
             else { loggerFactory.AddDebug(LogLevel.Error); }
             
-            app.UseStaticFiles();
-
             app.UseMvc(config =>
             {
                 config.MapRoute(

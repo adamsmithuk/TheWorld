@@ -6,12 +6,14 @@ namespace TheWorld.Models
     public interface IWorldRepository
     {
         IEnumerable<Trip> GetAllTrips();
+        IEnumerable<Trip> GetTripByUserName(string username);
         Trip GetTripByName(string tripName);
+        Trip GetUserTripByName(string tripname, string username);
 
         void AddTrip(Trip trip);
-        void AddStop(string tripName, Stop newStop);
+        void AddStop(string tripName, Stop newStop, string username);
 
         Task<bool> SaveChangesAsync();
-
+        
     }
 }

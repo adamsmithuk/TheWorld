@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,20 +9,35 @@ namespace TheWorld.Models
     public class WorldContextSeedData
     {
         private WorldContext _context;
+        private UserManager<WorldUser> _userManager;
 
-        public WorldContextSeedData(WorldContext context)
+        public WorldContextSeedData(WorldContext context, UserManager<WorldUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task EnsureSeedData()
         {
+            if(await _userManager.FindByEmailAsync("adam.smithuk@outlook.com") == null)
+            {
+                var user = new WorldUser()
+                {
+                    UserName = "AdamSmith",
+                    Email = "adam.smithuk@outlook.com"
+                };
+
+                await _userManager.CreateAsync(user, "p@ssword!");
+            }
+
+
             if (!_context.Trips.Any())
             {
                 var usTrip = new Trip()
                 {
                     DateCreated = DateTime.UtcNow,
-                    UserName = "US Trips", // TODO
+                    Name = "US Trips",
+                    UserName = "AdamSmith", // TODO
                     Stops = new List<Stop>() {
                          new Stop() { Name = "Atlanta, GA", Arrival= new DateTime(2014, 6, 4), Latitude=33.748995, Longitude= -84.387982, Order=0 },
                          new Stop() { Name = "New York, NY", Arrival= new DateTime(2014,6,9), Latitude=40.712784, Longitude = -74.005941, Order = 1 },
@@ -37,7 +53,8 @@ namespace TheWorld.Models
                 var worldTrip = new Trip()
                 {
                     DateCreated = DateTime.UtcNow,
-                    UserName = "WorldTrip", // TODO
+                    Name = "WorldTrip",
+                    UserName = "AdamSmith",
                     Stops = new List<Stop>() {
                           // This dummy data is heavily abbreviated from the sample in the tutorial (which contained 50+ points) 
                          new Stop() {Order = 0, Latitude = 33.748995, Longitude = -84.387982, Name = "Atlanta, Georgia" , Arrival = DateTime.Parse("June 3, 2014") },
