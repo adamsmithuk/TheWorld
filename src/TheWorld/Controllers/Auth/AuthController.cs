@@ -23,9 +23,11 @@ namespace TheWorld.Controllers
 
         public IActionResult Login()
         {
-            if(User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Trips", "App");
+          
+           if(User.Identity.IsAuthenticated)
+           {
+                // DO NOT AUTO DIRECT
+                // return RedirectToAction("Trips", "App");
             }
 
             return View();
@@ -66,7 +68,7 @@ namespace TheWorld.Controllers
                 await _signInManager.SignOutAsync();
             }
 
-            return RedirectToAction("Trips", "App");
+            return RedirectToAction("Index", "App");
         }
 
 

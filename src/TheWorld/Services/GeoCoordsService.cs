@@ -30,41 +30,40 @@ namespace TheWorld.Services
                 Message = "Failed to get coordinates"
             };
 
-            // ************** BING *********************
-            // Set up for Bing Maps to return Longitude and Latitude
-            var apiKey = _config["Keys:BingKeys"];
+            // Get Longitude and Latitude from place name
+
             var encodedName = WebUtility.UrlEncode(name);
-            var url = $"http://dev.virtualearth.net/REST/v1/Locations?query={encodedName}&key={apiKey}";
+
+            // Set up for Google Maps
+            var apiKey = _config["Keys:GoogleKeys"];
+            var url = $"https://maps.googleapis.com/maps/api/geocode/json?address={encodedName}&key={apiKey}";
 
             var client = new HttpClient();
 
             var json = await client.GetStringAsync(url);
 
             var results = JObject.Parse(json);
-            var resources = results["resourceSets"][0]["resources"];
-            if (!resources.HasValues)
-            {
+            var resources = results["results"][0];
+            if(!results.HasValues)
+            { 
                 result.Message = $"could not find '{name}' as a location";
             }
             else
             {
-                var confidence = (string)resources[0]["confidence"];
-                if (confidence != "High")
+                var confidence = (string)resources["geometry"]["location_type"];
+                if (confidence == "TODO!!" )
                 {
                     result.Message = $"Could not find a confident match for '{name}' as a coordinate point";
                 }
                 else
                 {
-                    var coords = resources[0]["geocodePoints"][0]["coordinates"];
-                    result.Latitude = (double)coords[0];
-                    result.Longitude = (double)coords[1];
+                    result.Latitude = (double)resources["geometry"]["location"]["lat"];
+                    result.Longitude = (double)resources["geometry"]["location"]["lng"];
                     result.Success = true;
                     result.Message = "Success";
                 }
             }
-
             return result;
-
         }
     }
 }

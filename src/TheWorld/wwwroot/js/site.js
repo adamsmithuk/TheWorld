@@ -15,7 +15,14 @@
         }
     });
 
-
+    $("#hide").click(function () {
+        $("#passwordform").hide();
+        $("#existinguserform").show();
+    });
+    $("#show").click(function () {
+        $("#passwordform").show();
+        $("#existinguserform").hide();
+    });
 
     //var ele = $("#username");
     //ele.text("Dylan Smith");

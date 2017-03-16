@@ -69,3 +69,18 @@
       margin-left:0;
       transition: margin-left ease .25s;
   }
+
+    #map{
+        width: 100%;
+        height: 600px;
+    }
+
+.welcome {
+  position: absolute;
+  min-width:300px;
+  max-width:400px;
+  top: 40%;
+  left:50%;
+  transform: translate(-50%,-50%);
+}
+

@@ -15,7 +15,6 @@
     "Microsoft.Extensions.Configuration.Json": "1.1.1",
     "Microsoft.Extensions.Logging.Console": "1.0.0",
     "Microsoft.NETCore.App": {
-      "type": "platform",
       "version": "1.1.0"
     },
     "Microsoft.EntityFrameworkCore.Tools.DotNet": "1.0.0-preview3-final",
@@ -35,7 +34,9 @@
   "publishOptions": {
     "include": [
       "wwwroot",
-      "web.config"
+      "web.config",
+      "Views",
+      "config.json"
     ]
   },
   "runtimeOptions": {
@@ -43,8 +44,13 @@
       "System.GC.Server": true
     }
   },
+  "runtimes": {
+    "win10-x64": {}
+  },
   "scripts": {
-    "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
+    "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ],
+    "prepublish": [ "npm install", "bower install" ],
+    "prepare": "gulp minify"
   },
   "tools": {
     "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.0.0-preview2-final",

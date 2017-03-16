@@ -1,11 +1,38 @@
-﻿@{
+﻿@model TheWorld.ViewModels.LoginViewModel
+@{
     ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout_Index.cshtml";
 }
 
-    <div class="row">
-        <div class="col-md-12">
-            <h1>Welcome to the World</h1>
-            <p>This app will allow you to plan for world Trips</p>
-            <a asp-controller="App" asp-action="trips" class="btn btn-lg btn-success">View My Trips</a>
-        </div>
+<div class="row">
+    <div class="welcome">
+        <h1 class="text-center">Welcome!</h1>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="text-info" id="username">
+                <h2 class="text-center">@User.Identity.Name</h2>
+            </div>
+
+
+                <div class="btn-group btn-group-justified">
+                    <div class="btn-group">
+                        <a asp-controller="Auth" asp-action="Login" class="btn btn-lg btn-success btn-block">Login</a>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <br />
+                    <a asp-controller="Auth" asp-action="Logout" class="text-center">New User</a>
+                </div>
+
+
+        }
+        else
+        {
+            <div class="text-center">
+                <a asp-controller="Auth" asp-action="Login" class="btn btn-lg btn-success btn-block">Login</a>
+            </div>
+        }
+
     </div>
+</div>
+

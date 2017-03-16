@@ -76,7 +76,7 @@ namespace TheWorld
             {
                 config.User.RequireUniqueEmail = true;
                 config.Password.RequiredLength = 8;
-                config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
+                config.Cookies.ApplicationCookie.LoginPath = "/";
                 config.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents()
                 {
                     OnRedirectToLogin = async ctx =>

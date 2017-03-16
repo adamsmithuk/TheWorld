@@ -1,14 +1,14 @@
 ﻿@model TheWorld.ViewModels.RegisterViewModel
 @{
     ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout_Index.cshtml";
 }
 @section scripts {
     <script src="~/lib/jquery-validate/dist/jquery.validate.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
 }
 <div class="row">
-
-    <div class="col-md-6 col-md-offset-3">
+    <div class="welcome">
         <h3>Register</h3>
         <form method="post" novalidate>
             <div asp-validation-summary="ModelOnly"></div>
@@ -31,15 +31,17 @@
                 <label asp-for="ConfirmPassword"></label>
                 <input asp-for="ConfirmPassword" class="form-control" />
                 <span asp-validation-for="ConfirmPassword"></span>
-            </div> 
-            <div class="form-group">
-                <a asp-controller="App" asp-action="Index" class="btn btn-default">Cancel</a>
-                <input type="submit" value="Submit" class="btn btn-success" />
             </div>
-
+            <div class="form-group">
+                <div class="btn-group btn-group-justified">
+                    <div class="btn-group">
+                        <a asp-controller="App" asp-action="Index" class="btn btn-default">Cancel</a>
+                    </div>
+                    <div class="btn-group">
+                        <input type="submit" value="Submit" class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
         </form>
-
     </div>
-
-
 </div>
