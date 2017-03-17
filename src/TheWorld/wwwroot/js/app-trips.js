@@ -17,6 +17,12 @@
                 templateUrl: "/views/tripEditorView.html"
             });
 
+            $routeProvider.when("/file", {
+                controller: "fileInputController",
+                controllerAs: "vm",
+                templateUrl: "/views/fileView.html"
+            });
+
             $routeProvider.otherwise({
                 redirectTo: "/"
             });

@@ -1,0 +1,1 @@
+!function(){"use strict";function t(t){alert("File Upload")}t.$inject=["$http"],angular.module("app-trips").controller("fileInputController",t)}();

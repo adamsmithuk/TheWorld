@@ -1,0 +1,1 @@
+"use strict";!function(){angular.module("application").factory("entityService",["akFileUploaderService",function(e){return{saveTutorial:function(t){return e.saveModel(t,"/controllerName/actionName")}}}])}();

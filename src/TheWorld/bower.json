@@ -12,6 +12,7 @@
     "jquery-validation-unobtrusive": "~3.2.6",
     "underscore": "~1.8.3",
     "angular-route": "~1.6.3",
-    "travelmap": "~1.0.2"
+    "travelmap": "~1.0.2",
+    "canvas-to-blob": "~3.7.0"
   }
 }

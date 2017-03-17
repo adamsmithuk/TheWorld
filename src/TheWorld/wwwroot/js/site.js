@@ -24,22 +24,5 @@
         $("#existinguserform").hide();
     });
 
-    //var ele = $("#username");
-    //ele.text("Dylan Smith");
-
-    //var main = $("#main");
-    //main.on("mouseenter", function () {
-    //    main.style.backgroundColor = "#888";
-    //});
-    //main.on("mouseleave", function () {
-    //    main.style.backgroundColor = "";
-    //});
-
-    //var munItem = $("ul.menu li a");
-    //munItem.on("click", function () {
-    //    var me = $(this);
-    //    alert(me.text());
-    //});
-    
 })();
 

@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using TheWorld.Models;
@@ -18,23 +21,33 @@ namespace TheWorld.Controllers.Web
         private IConfigurationRoot _config;
         private IWorldRepository _repository;
         private ILogger<AppController> _logger;
+        private IHostingEnvironment _hostingEnvironment;
 
         public AppController(IMailServices mailService, 
             IConfigurationRoot config, 
             WorldContext context,
             IWorldRepository repository,
-            ILogger<AppController> logger) 
+            ILogger<AppController> logger,
+            IHostingEnvironment hostingEnvironment) 
         {
             _mailService = mailService;
             _config = config;
             _repository = repository;
             _logger = logger;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Index()
         {
             return View();
         }
+
+        [Authorize]
+        public IActionResult Upload()
+        {
+            return Redirect("Trips#/file");
+        }
+
 
         [Authorize]
         public IActionResult Trips()
@@ -85,5 +98,6 @@ namespace TheWorld.Controllers.Web
         {
             return View();
         }
+
     }
 }

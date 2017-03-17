@@ -1,0 +1,1 @@
+"use strict";!function(){angular.module("application").controller("homeCtrl",["$scope","entityService",function(o,n){o.saveTutorial=function(o){n.saveTutorial(o).then(function(o){console.log(o)})}}])}();
